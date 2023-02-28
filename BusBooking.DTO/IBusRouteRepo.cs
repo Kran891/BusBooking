@@ -11,6 +11,6 @@ namespace BusBooking.DTO
     {
         Task<BusRoute> AddBusRoute(BusRoute busRoute);
         Task<int> DeleteBusRoute (BusRoute busRoute);
-
+        Task<List<string>> GetBusRoute(int id);
     }
 }

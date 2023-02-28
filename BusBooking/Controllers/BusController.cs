@@ -8,11 +8,14 @@ namespace BusBooking.Controllers
     public class BusController : Controller
     {
         private readonly IBusInfoRepos busInfoRepos;
+        private readonly IBusRouteRepo busRouteRepo;
 
-        public BusController(IBusInfoRepos busInfoRepos)
+        public BusController(IBusInfoRepos busInfoRepos,IBusRouteRepo busRouteRepo)
         {
             this.busInfoRepos = busInfoRepos;
+            this.busRouteRepo = busRouteRepo;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -22,6 +25,12 @@ namespace BusBooking.Controllers
         public async Task<IActionResult> AddBus([FromBody] BusInfoModel busInfoModel)
         {
            return Json( await busInfoRepos.AddBus(busInfoModel));
+        }
+        [Route("bus/getbusroute/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetBusRoute(int id)
+        {
+            return Json(await busRouteRepo.GetBusRoute(id));
         }
     }
 }

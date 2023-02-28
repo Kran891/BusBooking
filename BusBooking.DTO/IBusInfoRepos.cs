@@ -13,5 +13,6 @@ namespace BusBooking.DTO
         Task<BusInfoModel> AddBus(BusInfoModel busInfoModel);
         Task<BusInfo> UpdateBus(BusInfo busInfo);
         Task<int> DeleteBus(int id);
+        
     }
 }

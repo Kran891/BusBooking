@@ -43,7 +43,21 @@ namespace BusBooking.DTO
             await dbContext.SaveChangesAsync();
             return busRoute;
         }
-
+       public async Task<List<string>> GetBusRoute(int id)
+        {
+            List<string> list = await (from r in dbContext.busRoutes
+                                       where r.BusInfo.Id == id
+                                       orderby r.OrginTime.TimeOfDay 
+                                       select r.Origin.Name
+                                           ).Distinct().ToListAsync();
+            string des= await (from r in dbContext.busRoutes
+                               where r.BusInfo.Id == id
+                               orderby r.OrginTime.TimeOfDay descending
+                               select r.Destination.Name 
+                                           ).FirstOrDefaultAsync();
+            list.Add(des);
+            return list;
+        }
         public Task<int> DeleteBusRoute(BusRoute busRoute)
         {
             throw new NotImplementedException();
