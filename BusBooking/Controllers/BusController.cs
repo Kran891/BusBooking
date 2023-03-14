@@ -32,5 +32,11 @@ namespace BusBooking.Controllers
         {
             return Json(await busRouteRepo.GetBusRoute(id));
         }
+        [Route("bus/searchbus")]
+        [HttpGet]
+        public Task<IActionResult> SearchBuses([FromBody] BusSearchModel busSearchModel)
+        {
+            return Json("Hi");
+        }
     }
 }

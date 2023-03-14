@@ -1,4 +1,5 @@
 ﻿using BusBooking.Entities;
+using BusBooking.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,50 @@ namespace BusBooking.DTO
         public Task<int> DeleteBusRoute(BusRoute busRoute)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<BusSearchModel>> SearchBuses(BusSearchModel busSearchModel)
+        {
+            List<BusSearchModel> busSearchModels;
+            if(busSearchModel.TravelDate!=DateTime.Today)
+            busSearchModels= await
+                  (from r in dbContext.busRoutes
+                   join b in dbContext.Buses on r.BusInfo.Id equals b.Id
+                   where r.Origin.Name.ToLower() == busSearchModel.Origin.ToLower()
+                   && r.Destination.Name.ToLower() == busSearchModel.Destination.ToLower()
+                   orderby r.OrginTime.TimeOfDay
+                   select new BusSearchModel
+                   {
+                       BusNumber=b.BusNumber,
+                       SeatType=b.seatType.ToString(),
+                       OriginTime=r.OrginTime,
+                       Origin=busSearchModel.Origin,
+                       Destination=busSearchModel.Destination,
+                       Fair=(decimal) r.Fair,
+                       TravelsName=b.Routes
+                   }
+                   ).ToListAsync();
+            else
+                busSearchModels = await
+      (from r in dbContext.busRoutes
+       join b in dbContext.Buses on r.BusInfo.Id equals b.Id
+       where r.Origin.Name.ToLower() == busSearchModel.Origin.ToLower()
+       && r.Destination.Name.ToLower() == busSearchModel.Destination.ToLower()
+       && DateTime.Now.Date+r.OrginTime.AddHours(1).TimeOfDay >= DateTime.Now
+       orderby r.OrginTime.TimeOfDay
+
+       select new BusSearchModel
+       {
+           BusNumber = b.BusNumber,
+           SeatType = b.seatType.ToString(),
+           OriginTime = r.OrginTime,
+           Origin = busSearchModel.Origin,
+           Destination = busSearchModel.Destination,
+           Fair = (decimal)r.Fair,
+           TravelsName = b.Routes
+       }
+       ).ToListAsync();
+            return busSearchModels;
         }
     }
 }
