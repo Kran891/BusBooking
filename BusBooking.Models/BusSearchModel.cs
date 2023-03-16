@@ -14,8 +14,8 @@ namespace BusBooking.Models
         public string? BusNumber { get; set; }
         public string? TravelsName { get; set; }
         public string? SeatType { get; set; }
-        public DateTime? OriginTime { get; set; }
-        public DateTime? TravelDate { get; set; }
+        public DateTime OriginTime { get; set; }
+        public DateTime TravelDate { get; set; }
 
     }
 }

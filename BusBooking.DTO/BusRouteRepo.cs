@@ -67,7 +67,7 @@ namespace BusBooking.DTO
         public async Task<List<BusSearchModel>> SearchBuses(BusSearchModel busSearchModel)
         {
             List<BusSearchModel> busSearchModels;
-            if(busSearchModel.TravelDate!=DateTime.Today)
+            if(busSearchModel.TravelDate.Date!=DateTime.Today.Date)
             busSearchModels= await
                   (from r in dbContext.busRoutes
                    join b in dbContext.Buses on r.BusInfo.Id equals b.Id
@@ -91,7 +91,7 @@ namespace BusBooking.DTO
        join b in dbContext.Buses on r.BusInfo.Id equals b.Id
        where r.Origin.Name.ToLower() == busSearchModel.Origin.ToLower()
        && r.Destination.Name.ToLower() == busSearchModel.Destination.ToLower()
-       && DateTime.Now.Date+r.OrginTime.AddHours(1).TimeOfDay >= DateTime.Now
+       && (r.OrginTime.AddHours(1).Hour+r.OrginTime.Minute/60)>= (DateTime.Now.Hour+DateTime.Now.Minute/60)  
        orderby r.OrginTime.TimeOfDay
 
        select new BusSearchModel
@@ -102,7 +102,7 @@ namespace BusBooking.DTO
            Origin = busSearchModel.Origin,
            Destination = busSearchModel.Destination,
            Fair = (decimal)r.Fair,
-           TravelsName = b.Routes
+           TravelsName = (DateTime.Now.Date + r.OrginTime.AddHours(1).TimeOfDay).ToString()
        }
        ).ToListAsync();
             return busSearchModels;

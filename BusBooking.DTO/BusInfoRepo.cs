@@ -41,6 +41,11 @@ namespace BusBooking.DTO
             return 1;
         }
 
+        public async Task<List<string>> GetAllCities()
+        {
+            return await (from c in dbContext.Cities select c.Name).ToListAsync();
+        }
+
         public async Task<BusInfo> UpdateBus(BusInfo busInfo)
         {
             dbContext.Buses.Update(busInfo);
