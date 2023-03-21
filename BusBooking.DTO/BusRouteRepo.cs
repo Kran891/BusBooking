@@ -71,6 +71,7 @@ namespace BusBooking.DTO
             busSearchModels= await
                   (from r in dbContext.busRoutes
                    join b in dbContext.Buses on r.BusInfo.Id equals b.Id
+                   
                    where r.Origin.Name.ToLower() == busSearchModel.Origin.ToLower()
                    && r.Destination.Name.ToLower() == busSearchModel.Destination.ToLower()
                    orderby r.OrginTime.TimeOfDay

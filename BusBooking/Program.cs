@@ -18,6 +18,7 @@ builder.Services.AddDbContext<BusDbContext>(
     });
 builder.Services.AddTransient<IBusInfoRepos,BusInfoRepo>();
 builder.Services.AddTransient<IBusRouteRepo, BusRouteRepo>();
+builder.Services.AddTransient<IBusBookingRepo, BusBookingRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
